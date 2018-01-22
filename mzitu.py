@@ -3,6 +3,7 @@ import requests
 from lxml import html
 import os
 import time
+from multiprocessing.dummy import Pool as ThreadPool
 
 def header(referer):
     headers = {
@@ -65,8 +66,5 @@ def getPiclink(url):
 if __name__ == '__main__':
     pageNum = input(u'请输入页码：')
     p = getPage(pageNum)
-    for e in p:
-        print(e)
-        getPiclink(e)
-        # lxml的报错
-        time.sleep(2)
+    with ThreadPool(4) as pool:
+        pool.map(getPiclink, p)    
